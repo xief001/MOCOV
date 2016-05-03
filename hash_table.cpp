@@ -7,18 +7,7 @@
 
 int index_num;
 extern int length[num_read];
-typedef struct k_mer_node     //k-mer节点的结构
-{
-	int i_read;
-	int j_position;
-	struct k_mer_node *next;
-}k_mer_node;
 
-typedef struct head_node_index   //存储index的头节点结构
-{
-	char *head_hash_table;
-	struct k_mer_node *next;
-}head_node_index;
 
 
 
@@ -54,6 +43,25 @@ int len_hash_table[max_len_head_hash];//哈希表长度计数
 
 int count_of_node[num_read][int(len_read*2)];//节点计数数组
 
+typedef struct node_position   //记录该kmer的首次出现位置，用来记录其出现次数
+{
+	int i_position;
+	int j_position;
+}node_position;
+
+node_position every_kmer_times_position[num_read][len_read*2];//记录每一个kmer的可靠次数
+
+void init_every_kmer_times_position()
+{
+	for(int i = 0 ;i<num_read;i++)
+	{
+		for(int j= 0; j< length[i];j++)
+		{
+			every_kmer_times_position[i][j].i_position=0;
+			every_kmer_times_position[i][j].j_position=0;
+		}
+	}
+}
 
 void init_hash_table()
 {
@@ -411,12 +419,27 @@ void insert_to_hash_table()
 				head_of_hash_table[index_num].next=new_node;
 				count_of_node[new_node->i_read][new_node->j_position]++;
 				len_hash_table[index_num]++;
+				every_kmer_times_position[i][j].i_position=i;
+				every_kmer_times_position[i][j].j_position=j;
 			}
-			if(flag==OLD_KMER_NODE)//否则，是旧节点，向计数器加1
+			if(flag==OLD_KMER_NODE)//否则，是旧节点，向计数器加1，将旧节点的位置告诉当前kmer
 			{
 				count_of_node[old_node->i_read][old_node->j_position]++;
+				every_kmer_times_position[i][j].i_position=old_node->i_read;
+				every_kmer_times_position[i][j].j_position=old_node->j_position;
 			}
 			//num_short_k_mer++;
+		}
+	}
+}
+
+void get_every_kmer_times()
+{
+	for(int i =0;i<num_read;i++)
+	{
+		for(int j=0 ;j<length[i]-short_k+1;j++)
+		{
+			count_of_node[i][j]=count_of_node[every_kmer_times_position[i][j].i_position][every_kmer_times_position[i][j].j_position];
 		}
 	}
 }
@@ -498,40 +521,31 @@ void count_k_mer_times()
 			}
 		}
 	}
-}
-
-void output_k_mer_times()
-{
-	for(int i=0;i<num_read;i++)
-	{
-		cout<<"第"<<i<<"行:  ";
-		for(int j=0;j<length[i];j++)
-		{
-			cout<<" "<<k_mer_times[i][j].flag<<" ";
-		}
-		cout<<endl;
-	}
-}
-void output_times()
-{
-	for(int i=0;i<num_read;i++)
-	{
-		for(int j=0;j<length[i];j++)
-		{
-			cout<<times[i][j]<<" ";
-		}
-		cout<<endl;
-	}
-}
-
-
-
-
-
-
-void get_count_of_node()
-{
 	
+}
+
+
+
+
+
+
+
+void save_as_count_of_nodes()
+{
+	ofstream fout3;
+	fout3.open("E:\\count_of_node.txt",ios::trunc);
+
+	
+	for(int i=0;i<num_read;i++)
+	{
+		fout3<<"NO."<<i<<"   ";
+		for(int j=0;j<length[i];j++)
+		{
+			fout3<<count_of_node[i][j]<<" ";
+		}
+		fout3<<endl;
+	}
+
 }
 
 void save_as_kmer_times()
@@ -545,7 +559,7 @@ void save_as_kmer_times()
 		fout3<<"NO."<<i<<"   ";
 		for(int j=0;j<length[i];j++)
 		{
-			fout3<<k_mer_times[i][j].flag<<" ";
+			fout3<<k_mer_times[i][j].times<<" ";
 		}
 		fout3<<endl;
 		fout3<<endl;
@@ -563,9 +577,10 @@ extern void hash_table()
 	init_count_of_node();
 	init_k_mer_times();
 	init_times();
+	init_every_kmer_times_position();
 	cout<<"insert_to_hash_table();"<<endl;
 	insert_to_hash_table();
-	
+	get_every_kmer_times();
 	//output_hash_table();
 
 	cout<<"count_k_mer_times();"<<endl;
@@ -576,5 +591,6 @@ extern void hash_table()
 	//output_times();
 	cout<<"------------------------------------------------------------------"<<endl;
 	save_as_kmer_times();
+	save_as_count_of_nodes();
 	//output_k_mer_times();
 }

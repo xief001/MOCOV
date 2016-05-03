@@ -11,38 +11,38 @@
 using namespace std;
 
 /*
-#define len_genome 10000000     //基因组长度为10000000
-#define num_read 1000           //随机起点个数为1000
-#define len_read 10000            //read 的长度 1K-10K
-#define short_k 10               //进行匹配的短k-mer长度
+#define len_genome 1000000     //基因组长度为10000000
+#define num_read 5000           //随机起点个数为1000
+#define len_read 1000            //read 的长度 1K-10K
+#define short_k 7               //进行匹配的短k-mer长度
 #define long_k 20                // 进行匹配的长k-mer长度
 #define len_index 3              //进行匹配时的索引长度
 #define len_index_error 3        //匹配k-mer时允许有的错误匹配数
 #define len_array_k_mer 64         //k-mer存储数组的长度
 #define len_k_mer_error 3        //匹配时容许k-mer错误
 #define invalid_value  3            //无效匹配
-#define valid_value  10            //有效匹配
+#define valid_value  3            //有效匹配
 */
 
-#define len_genome 1000000     //基因组长度为10000000
-#define num_read 50         //随机起点个数为1000
-#define len_read 1000            //read 的长度 10-20
-#define short_k 7               //进行匹配的短k-mer长度，
+#define len_genome 4000000     //基因组长度为10000000
+#define num_read 1000         //随机起点个数为1000
+#define len_read 10000            //read 的长度 10-20
+#define short_k 10              //进行匹配的短k-mer长度，
 #define long_k 6               // 进行匹配的长k-mer长度
-#define len_index 2              //进行匹配时的索引长度
+#define len_index 3              //进行匹配时的索引长度
 #define len_index_error 3        //匹配k-mer时允许有的错误匹配数
 #define len_array_k_mer 64         //k-mer存储数组的长度
-#define len_k_mer_error 0        //匹配时容许k-mer错误
+#define len_k_mer_error 1        //匹配时容许k-mer错误
 #define invalid_value  2            //无效匹配
-#define valid_value  2//有效匹配
+#define valid_value  5//有效匹配
 
 /*
-#define len_genome 1000     //基因组长度为10000000
-#define num_read 10         //随机起点个数为1000
-#define len_read 50            //read 的长度 10-20
-#define short_k 4               //进行匹配的短k-mer长度
+#define len_genome 1000  //基因组长度为10000000
+#define num_read 50         //随机起点个数为1000
+#define len_read 100            //read 的长度 10-20
+#define short_k 6              //进行匹配的短k-mer长度
 #define long_k 6               // 进行匹配的长k-mer长度
-#define len_index 2              //进行匹配时的索引长度
+#define len_index 3              //进行匹配时的索引长度
 #define len_index_error 3        //匹配k-mer时允许有的错误匹配数
 #define len_array_k_mer 64         //k-mer存储数组的长度
 #define len_k_mer_error 0        //匹配时容许k-mer错误

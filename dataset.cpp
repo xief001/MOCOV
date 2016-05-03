@@ -113,8 +113,8 @@ void rand_length()//生成随机read长度
 	int i;
 	for(i=0;i<num_read;i++)
 	{
-		length[i]=500;
-		//length[i]=rand()%(len_read-10)+10;
+		//length[i]=10000;
+		length[i]=rand()%((int )(0.9*len_read))+((int )(0.1*len_read));
 		//str[i]=rand()%(len_read-1000)+1000;//str[i]=rand()%9000+1000;此处为1~10
 	}
 }
@@ -190,14 +190,21 @@ void insert()
 {
 	ofstream fout4;
 	fout4.open("E:\\insert.txt",ios::trunc);
+	int num_of_insertion=0;
 
 	int insert_i=0,insert_j=0;//i表示sample数组的行，j表示sample数组的列，sample[i][j]表示进行插入的位置
-	int num_of_insertion=0;
-	while(num_of_insertion<total_num_of_bases*0.01)
+	
+	while(num_of_insertion<total_num_of_bases*0.03)
 	{
 		//cout<<"num_of_insertion: "<<num_of_insertion<<endl;
 		insert_i=rand()%num_read;
-		insert_j=rand()%length[insert_i];
+		//insert_j=rand()%(length[insert_i]);
+		if(length[insert_i]>(2*short_k))
+		{
+			insert_j=rand()%(length[insert_i]-short_k*2)+short_k;
+		}
+		else
+			continue;
 		char ch;//随机插入的碱基
 		switch (rand()%4)
 		{
@@ -234,17 +241,24 @@ void deletion()
 	int deletion_i=0,deletion_j=0;//i表示sample数组的行，j表示sample数组的列，sample[i][j]表示进行删除的位置
 	int num_of_deletion=0;
 	//cout<<"total_num_of_bases: "<<total_num_of_bases<<endl;
-	while(num_of_deletion<total_num_of_bases*0.01)
+	while(num_of_deletion<total_num_of_bases*0.03)
 	{
 		//cout<<"num_of_deletion: "<<num_of_deletion<<endl;
 		deletion_i=rand()%num_read;
+		/*
 		if(length[deletion_i]!=0)
 		{
 			deletion_j=rand()%length[deletion_i];
 		}
 		else 
 			continue;
-		
+		*/
+		if(length[deletion_i]>(2*short_k))
+		{
+			deletion_j=rand()%(length[deletion_i]-short_k*2)+short_k;
+		}
+		else 
+			continue;
 		fout5<<"sample["<<deletion_i<<"]["<<deletion_j<<"] delete"<<sample[deletion_i][deletion_j]<<endl;
 		int j=deletion_j;
 		for(;j<length[deletion_i]-1;j++)//将选定位置后面的碱基向后移动
@@ -327,10 +341,10 @@ void save_as_query()
 	fout1.open("E:\\original.fasta",ios::trunc);
 	for(int i=0;i<num_read;i++)
 	{
-		fout1<<">"<<i<<" "<<endl;
+		fout1<<">"<<i<<position[i]<<endl;
 		for(int j=0;j<length[i];j++)
 		{
-			fout1<<sample[i][j];
+			fout1<<j<<sample[i][j]<<" ";
 		}
 		fout1<<endl;
 	}
@@ -340,14 +354,60 @@ void save_as_target()
 {
 	ofstream fout2;
 	fout2.open("E:\\target.fasta",ios::trunc);
-	
-		fout2<<">target"<<" "<<endl;
-		for(int j=0;j<len_genome;j++)
+
+	fout2<<">target";
+	for(int j=0;j<len_genome;j++)
+	{
+		fout2<<j<<genome[j]<<" ";
+	}
+	fout2<<endl;
+
+}
+
+void read_file()
+{
+	FILE * f_fp;
+	char ch;
+	int i=0,j=0;
+	int flag=0;
+	f_fp=fopen("E:\\original.fasta","r");
+	while (!feof(f_fp))
+	{		
+		ch=fgetc(f_fp);
+		if(ch=='\"')
 		{
-			fout2<<genome[j];
+			continue;
 		}
-		fout2<<endl;
-	
+		if(ch=='\n')
+		{
+			if(flag==0)
+			{
+				flag=1;
+				continue;
+			}
+			else
+			{
+				length[i]=j;
+				i++;
+				j=0;
+				flag=0;
+				continue;
+			}
+		}
+		if(ch==' ')
+		{
+			continue;
+		}
+		if(ch>=48&&ch<=57)
+		{
+			continue;
+		}
+		if(ch=='A'||ch=='T'||ch=='C'||ch=='G')
+		{
+			sample[i][j]=ch;
+			j++;
+		}
+	}
 }
 
 
@@ -372,32 +432,20 @@ extern void dataset()
 	//output_read_length();	
 	rand_read();
 	cout<<"rand_read();"<<endl;
-	//cout<<"生成的初始read："<<endl;
-	//output_sample();
-	//cout<<"引入碱基替换错误："<<endl;
-	//replace();//引入碱基替换错误
-	//cout<<"replace();//引入碱基替换错误"<<endl;
-
-	//output_read_length();
-	//output_sample();
-	//cout<<"引入碱基插入错误："<<endl;
+	
 	insert();//引入插入错误
 	cout<<"insert();//引入插入错误"<<endl;
 
-	//output_read_length();
-	//output_sample();
-	//cout<<"引入碱基删除错误："<<endl;
+	
 	deletion();//引入删除错误
 	cout<<"deletion();//引入删除错误"<<endl;
 
-	//output_read_length();
-	//output_sample();
-	//get_short_k_mer();
-	//cout<<"用数组存k-mer："<<endl;
-	//output_short_k_mer();
-	//save_as_query();
-	//save_as_target();
+	
+	save_as_query();
+	save_as_target();
 	//save_as_kmer_times();
+	
+	//read_file();
 
 	
 }
