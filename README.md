@@ -1,7 +1,7 @@
 # MOCOV
 ###Basic usage:
 
-    MOCOV consensus.fasta [-options|--options] > corrected.fasta
+    MOCOV queries.fasta [-options|--options] > corrected.fasta
 ###Options Description (default value)
 
 -k/--kmer(10)
