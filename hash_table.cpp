@@ -17,7 +17,7 @@ int times[num_read][int(len_read*2)];
 
 void init_k_mer_times()
 {
-	for(int i=0;i<num_read;i++) //sample初始化为0
+	for(int i=0;i<num_read;i++)
 	{
 		for(int j=0;j<length[i];j++)
 		{
@@ -28,7 +28,7 @@ void init_k_mer_times()
 }
 void init_times()
 {
-	for(int i=0;i<num_read;i++) //sample初始化为0
+	for(int i=0;i<num_read;i++) 
 	{
 		for(int j=0;j<length[i];j++)
 		{
@@ -38,18 +38,18 @@ void init_times()
 }
 
 
-head_node_index head_of_hash_table[max_len_head_hash];//哈希表头节点数组
-int len_hash_table[max_len_head_hash];//哈希表长度计数
+head_node_index head_of_hash_table[max_len_head_hash];                  //hash table's head node
+int len_hash_table[max_len_head_hash];                                  //number of hash table's head node
 
-int count_of_node[num_read][int(len_read*2)];//节点计数数组
+int count_of_node[num_read][int(len_read*2)];                           //array of counting every kmer (in read) times
 
-typedef struct node_position   //记录该kmer的首次出现位置，用来记录其出现次数
+typedef struct node_position                                            //the position of kmer's first appearance
 {
 	int i_position;
 	int j_position;
 }node_position;
 
-node_position every_kmer_times_position[num_read][len_read*2];//记录每一个kmer的可靠次数
+node_position every_kmer_times_position[num_read][len_read*2];          
 
 void init_every_kmer_times_position()
 {
@@ -181,7 +181,7 @@ void init_len_hash_table()
 
 void init_count_of_node()
 {
-	for(int i=0;i<num_read;i++) //sample初始化为0
+	for(int i=0;i<num_read;i++) 
 	{
 		for(int j=0;j<length[i];j++)
 		{
@@ -190,7 +190,7 @@ void init_count_of_node()
 	}
 }
 
-int get_index_num(char *ch)  //通过ch的前len_index来判断它的index_num（AA---0,AT---1,AC---2,AG---3...）
+int get_index_num(char *ch)                                             //check the first len_index bases of kmer len_index to get its index_num（AA---0,AT---1,AC---2,AG---3...）
 {
 	if(len_index==1)
 	{
@@ -367,9 +367,9 @@ void insert_to_hash_table()
 {
 	//num_short_k_mer=0;
 	int index_num;
-	char ch[short_k+1];            //用来暂时存储当前k-mer
-	struct k_mer_node *new_node,*old_node;//new_node表示新节点，old_node表示已经存在在表中的节点
-
+	char ch[short_k+1];                                                   //temp str for temp k-mer
+	struct k_mer_node *new_node,*old_node;                                //new_node stands for the nodes haven't been setted into hash table
+	                                                                      //old_node stands for the nodes have been setted into hash table
 	for(int i=0;i<num_read;i++)
 	{
 		for(int j=0;j<length[i]-short_k+1;j++)
@@ -382,10 +382,10 @@ void insert_to_hash_table()
 			ch[k]='\0';
 			index_num=get_index_num(ch);
 			int flag=NEW_KMER_NODE;
-			//判断是不是已在表中的节点
+			                                                               //check if the node have been in hash table
 			if (head_of_hash_table[index_num].next!=NULL)
 			{
-				old_node=head_of_hash_table[index_num].next;//old_node指向index_num链后的第一个节点
+				old_node=head_of_hash_table[index_num].next;               //old_node pionts to the first node headed by index_num
 				while(old_node!=NULL)
 				{
 					int m;
@@ -402,15 +402,15 @@ void insert_to_hash_table()
 					}
 					if(flag==OLD_KMER_NODE)
 					{
-						break;//若新节点被判定为旧节点，停止向后扫描
+						break;                                              //if the node is found in hash tabld , break
 					}
-					else//若没有扫描到相同k-mer，继续向后
+					else                                                    //if the node is not found in hash tabld , continue
 					{
 						old_node=old_node->next;
 					}
 				}
 			}
-			if(flag==NEW_KMER_NODE)//若是新节点，将其加入哈希表对应链的头部，向计数器加1
+			if(flag==NEW_KMER_NODE)                                         //if the node is decide to be new node, add it into hash table (to be the first node pointed by index_num),and count_of_node++;
 			{
 				new_node=(struct k_mer_node*)malloc(LEN);
 				new_node->i_read=i;
@@ -422,7 +422,7 @@ void insert_to_hash_table()
 				every_kmer_times_position[i][j].i_position=i;
 				every_kmer_times_position[i][j].j_position=j;
 			}
-			if(flag==OLD_KMER_NODE)//否则，是旧节点，向计数器加1，将旧节点的位置告诉当前kmer
+			if(flag==OLD_KMER_NODE)                                         //if the node is decide to be old node,  count_of_node++, add the old position to temp kmer
 			{
 				count_of_node[old_node->i_read][old_node->j_position]++;
 				every_kmer_times_position[i][j].i_position=old_node->i_read;
@@ -463,14 +463,12 @@ void output_hash_table()
 		cout<<endl;
 	}
 	//cout<<num_short_k_mer;
-
-	
 }
 
 void count_k_mer_times()
 {
 	int index_num;
-	char ch[short_k+1];            //用来暂时存储当前k-mer
+	char ch[short_k+1];                                                     //temp str for temp k-mer
 	for(int i=0;i<num_read;i++)
 	{
 		for(int j=0;j<length[i]-short_k+1;j++)
@@ -492,16 +490,16 @@ void count_k_mer_times()
 				{
 					int hamming=0;
 					int m;
-					for(m=len_index;m<short_k;m++)//求海明距离，搜索克匹配节点
+					for(m=len_index;m<short_k;m++)                         //get hamming distance between kmer in hash table and kmer in read
 					{
 						if(ch[m]!=sample[node->i_read][node->j_position+m])
 						{
 							hamming++;
 						}
 					}
-					if(hamming<=len_k_mer_error)//当前结点可匹配
+					if(hamming<=len_k_mer_error)                           //the  kmer in hash table can match to  kmer in read
 					{
-						if(count_of_node[node->i_read][node->j_position]>=valid_value)//大于等于有效匹配的，对其累计，否则过滤掉该节点
+						if(count_of_node[node->i_read][node->j_position]>=valid_value)//if the count of node is a valid kmer, add it to times 
 						{
 							
 							int n=0;
@@ -513,7 +511,6 @@ void count_k_mer_times()
 								k_mer_times[i][j+n-1].flag=0;
 							//k_mer_times[i][j+short_k-1].flag=1;//kmer尾部标志
 						}
-						
 						times[i][j]+=count_of_node[node->i_read][node->j_position];
 					}
 					node=node->next;
@@ -523,12 +520,6 @@ void count_k_mer_times()
 	}
 	
 }
-
-
-
-
-
-
 
 void save_as_count_of_nodes()
 {
@@ -566,9 +557,6 @@ void save_as_kmer_times()
 	}
 
 }
-
-
-
 
 extern void hash_table()
 {
