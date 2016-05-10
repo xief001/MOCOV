@@ -272,59 +272,7 @@ void output_sample()
 	}
 }
 
-/*
-void get_short_k_mer()
-{
-	num_short_k_mer=0;
-	initiate_array_k_mer();
-	char ch[short_k+1];            //用来暂时存储当前k-mer
-	int flag=0;            //用来标记当前k-mer是否存入array_k_mer[]，1为已存在，0为不存在，需添加
-	for(int i=0;i<num_read;i++)
-	{
-		for(int j=0;j<length[i]-short_k+1;j++)
-		{
-			for(int k=0;k<short_k;k++)
-			{
-				ch[k]=sample[i][j+k];
-				ch[k+1]='\0';
-			}
 
-			//此处应添加判断array_k_mer中不含有ch
-			for(int m=0;m<num_short_k_mer;m++)
-			{
-				if(array_k_mer[m].ch==ch)
-				{
-					array_k_mer[m].count_ch++;
-					flag=1;         //表示已有k-mer无需添加
-					break;
-				}
-				else
-				{
-					continue;
-				}
-			}
-			if(flag==0)
-			{
-				array_k_mer[num_short_k_mer].ch=ch;
-				array_k_mer[num_short_k_mer].count_ch++;
-				num_short_k_mer++;
-			}
-			flag=0;
-		}
-	}
-	
-}
-
-
-void output_short_k_mer()
-{
-	cout<<num_short_k_mer<<endl;
-	for(int i=0;i<num_short_k_mer;i++)
-	{
-		cout<<array_k_mer[i].ch<<" "<<array_k_mer[i].count_ch<<endl;
-	}
-}
-*/
 void save_as_query()
 {
 	ofstream fout1;
