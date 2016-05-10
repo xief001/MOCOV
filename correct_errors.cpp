@@ -19,7 +19,7 @@ int insertion[num_read][int(len_read*2)];
 int deletion[num_read][int(len_read*2)];
 com complex[num_read][int(len_read*2)];
 
-extern head_node_index head_of_hash_table[max_len_head_hash];//哈希表头节点数组
+extern head_node_index head_of_hash_table[max_len_head_hash];
 
 void init_insertion()
 {
@@ -122,9 +122,9 @@ void get_error_position()
 }
 */
 
-int num_of_found_insertion=0;//检测到的insertion个数
-int num_of_found_deletion=0;//检测到的deletion个数
-int num_of_found_complex=0;//检测到的complex个数
+int num_of_found_insertion=0;
+int num_of_found_deletion=0;
+int num_of_found_complex=0;
 
 /*
 void get_error_position()
@@ -174,11 +174,11 @@ void get_error_position()
 	}
 }
 */
-extern int count_of_node[num_read][int(len_read*2)];//节点计数数组
+extern int count_of_node[num_read][int(len_read*2)];
 
 extern int get_index_num(char *ch);
 
-int kmer_value;//kmer出现的次数，用来区分是否有效匹配
+int kmer_value;                                                       //kmer appearance times , to decide if it is a valid match
 
 
 int search_valid_kmer(char* kmer)
@@ -189,7 +189,7 @@ int search_valid_kmer(char* kmer)
 	if (head_of_hash_table[index_num].next!=NULL)
 	{
 		struct k_mer_node *node;
-		node=head_of_hash_table[index_num].next;//old_node指向index_num链后的第一个节点
+		node=head_of_hash_table[index_num].next;        
 		while(node!=NULL)
 		{
 			int m;
@@ -205,7 +205,7 @@ int search_valid_kmer(char* kmer)
 				kmer_value=count_of_node[node->i_read][node->j_position];
 				return kmer_value;
 			}
-			else//若没有扫描到相同k-mer，继续向后
+			else
 			{
 				node=node->next;
 			}
@@ -215,7 +215,7 @@ int search_valid_kmer(char* kmer)
 
 int distin_ins_del(int i ,int j )
 {
-	char ch1[short_k],ch2[short_k];//ch1 和ch2 表示从第一个“1”开始和第二个“1”开始对应的kmer，如果都能在哈希表中对应到高频率，则是插入错误，否则是删除错误
+	char ch1[short_k],ch2[short_k];                                  //ch1 stands for the first kmer that kmer_value=1,ch2 stands for the second kmer that kmer_value=1, if ch1 and ch2 both have high value in hash table, it is insertion error ,else it is deletion error
 	int m;
 	for( m = 0 ; m< short_k-1;m++)
 	{
@@ -232,18 +232,18 @@ int distin_ins_del(int i ,int j )
 	ch2[m]=sample[i][j+2];
 
 	int kmer_value1,kmer_value2;
-	int flag=0;//flag=1表示插入，2表示删除
+	int flag=0;                                                       //flag=1 stands for insertion error ;flag=2 stands for deletion error
 	kmer_value1=search_valid_kmer(ch1);
 	kmer_value2=search_valid_kmer(ch2);
-	if(kmer_value1>=valid_value&&kmer_value2>=valid_value)//此处是插入错误
+	if(kmer_value1>=valid_value&&kmer_value2>=valid_value)            //insertion error
 	{
 		flag=1;
 		//insertion[i][j]=1;
 	}
-	else//是删除错误
+	else                                                              //deletion error
 	{
 		flag=2;
-		//deletion[i][j]=1;//在j位置插入，j及以后向后移动。
+		//deletion[i][j]=1;                                           //move backwards subread
 		//num_of_found_deletion++;
 	}
 	return flag;
@@ -256,7 +256,7 @@ void get_error_position()
 	{
 		for(int j=0;j<length[i]-short_k;j++)
 		{
-			if(count_of_node[i][j]<=valid_value)//1的个数判断插入/复杂错误
+			if(count_of_node[i][j]<=valid_value)                       //use num of 1 to find error
 			{
 				count++;
 				continue;
@@ -267,7 +267,7 @@ void get_error_position()
 				{
 					continue;
 				}
-				if(count==short_k)//1的个数为5，是插入错误
+				if(count==short_k)                                     //num of 1 = short_k, insertion
 				{
 					num_of_found_insertion++;
 					insertion[i][j-1]=1;
@@ -276,14 +276,14 @@ void get_error_position()
 				}
 				if(count==short_k-2)
 				{
-					if(sample[i][j]!=sample[i][j+1])//deletion error
+					if(sample[i][j]!=sample[i][j+1])                   //deletion error
 					{
 						num_of_found_deletion++;
-						deletion[i][j+1]=1;//纠错时在j位置插入碱基，j+1及其以后的碱基向后移动。
+						deletion[i][j+1]=1;                            //add a random base to position j,and move backward bases
 						count=0;
 						continue;
 					}
-					else//需要判断是插入还是删错
+					else                                               //need further judgement
 					{
 						num_of_found_insertion++;
 						insertion[i][j]=1;
@@ -291,16 +291,16 @@ void get_error_position()
 						continue;
 					}
 				}
-				if(count==short_k-1)//1的个数为4，是删除或插入错误
+				if(count==short_k-1)                                   //num of 1 = short_k-1, insertion/deletion
 				{	
-					if(sample[i][j-1]!=sample[i][j])//deletion error
+					if(sample[i][j-1]!=sample[i][j])                   //deletion error
 					{
 						num_of_found_deletion++;
-						deletion[i][j]=1;//纠错时在j位置插入碱基，j及其以后的碱基向后移动。
+						deletion[i][j]=1;                              //add a random base to position j,and move backward bases
 						count=0;
 						continue;
 					}
-					else//需要判断是插入还是删错
+					else                                               //need further judgement
 					{
 						int flag=0;
 						flag=distin_ins_del( i , j);
@@ -310,7 +310,7 @@ void get_error_position()
 						}
 						if(flag==2)
 						{
-							deletion[i][j]=1;//在j位置插入，j及以后向后移动。
+							deletion[i][j]=1;                          //add a random base to position j,and move backward bases
 						}
 					}
 				}
@@ -394,11 +394,11 @@ void correct()
 		{
 			if(insertion[i][j]==1)
 			{
-				for(int m=j;m<length[i];m++)//向插入错误位置删除一个碱基
+				for(int m=j;m<length[i];m++)                          //add a random base to position j,and move backward bases
 				{
 					sample[i][m]=sample[i][m+1];
 				}
-				for(int k=j+1;k<length[i];k++)//把该行后面的错误向前移
+				for(int k=j+1;k<length[i];k++)                        //move other error position forward in error array 
 				{
 					if(insertion[i][j]==1)
 					{
@@ -417,7 +417,7 @@ void correct()
 			}
 			if(deletion[i][j]==1)
 			{
-				char ch;//随机插入的碱基
+				char ch;                                   
 				switch (rand()%4)
 				{
 				case 0:
@@ -433,16 +433,16 @@ void correct()
 					ch='G';
 					break;
 				}
-				for(int m=length[i];m>j+1;m--)//将选定位置后面的碱基向后移动
+				for(int m=length[i];m>j+1;m--)                        
 				{
 					sample[i][m]=sample[i][m-1];
 				}
-				sample[i][j+1]=ch;//插入一个碱基
+				sample[i][j+1]=ch;
 				length[i]++;
 			}
 			if(complex[i][j].flag==1)
 			{
-				for(int m=j;m<length[i];m++)//向插入错误位置删除一个碱基
+				for(int m=j;m<length[i];m++)
 				{
 					sample[i][m]=sample[i][m+1];
 				}
