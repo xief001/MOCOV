@@ -2,17 +2,18 @@
 //#include"hash_table.h"
 #include"dataset.h"
 
-char genome[len_genome+1];//基因组字符串
-int position[num_read];//长read起始位置数组
-int length[num_read];//1000条read的随机长度。1K-10K
-char sample[num_read][int(len_read*2)];//存放长read，长度扩大为1.1倍，用来存放碱基插入错误
-int total_num_of_bases=0 ;//生成的长read中所有碱基总数
-k_mer array_k_mer[len_array_k_mer];
-int num_short_k_mer=0; //标记短k-mer组中出现的k-mer的数量
+char genome[len_genome+1];                                 //genome
+int position[num_read];                                    //array for long read starting positions
+int length[num_read];                                      //array for every long read's length
+char sample[num_read][int(len_read*2)];                    //array for store every long read with error
+int total_num_of_bases=0 ;                                 //total num of bases in sample
+//k_mer array_k_mer[len_array_k_mer];
+int num_short_k_mer=0;                                     //number of k-mers for short match
+
 
 void initiate_sample()
 {
-	for(int i=0;i<num_read;i++) //sample初始化为0
+	for(int i=0;i<num_read;i++)                           
 	{
 		for(int j=0;j<len_read;j++)
 		{
@@ -20,7 +21,7 @@ void initiate_sample()
 		}
 	}
 }
-
+/*
 void initiate_array_k_mer()
 {
 	for(int i=0;i<len_array_k_mer;i++)
@@ -29,7 +30,7 @@ void initiate_array_k_mer()
 		array_k_mer[i].count_ch=0;
 	}
 }
-
+*/
 unsigned long ulrand(void) {
     return (
      (((unsigned long)rand()<<24)&0xFF000000ul)
@@ -37,7 +38,7 @@ unsigned long ulrand(void) {
     |(((unsigned long)rand()    )&0x00000FFFul));
 }
 
-char* rand_genome(char* str, const int len)//生成随机基因组
+char* rand_genome(char* str, const int len)
 {
 	int i;
 	for(i=0;i<len;i++)
@@ -86,7 +87,7 @@ int* rand_position(int* str, const int len)//生成随机起始点
 }
 void output_position()
 {
-	cout<<"随机起点："<<endl;
+	cout<<"random position："<<endl;
 	int i;
 	for(i=0;i<num_read;i++)
 	{
@@ -94,21 +95,8 @@ void output_position()
 	}
 	cout<<endl;
 }
-/*
-int* rand_length(int* str, const int num)//生成随机read长度
-{
-	total_num_of_bases=0;
-	int i;
-	for(i=0;i<num;i++)
-	{
-		str[i]=rand()%(len_read-1)+10;
-		//str[i]=rand()%(len_read-1000)+1000;//str[i]=rand()%9000+1000;此处为1~100
-		total_num_of_bases+=str[i];
-	}
-	return str;
-}
-*/
-void rand_length()//生成随机read长度
+
+void rand_length()
 {
 	int i;
 	for(i=0;i<num_read;i++)
@@ -129,7 +117,7 @@ void output_read_length()
 	cout<<endl;
 }
 
-void rand_read()//生成第i个长read
+void rand_read()
 {
 	int i,j;
 	total_num_of_bases=0;
@@ -148,16 +136,16 @@ void rand_read()//生成第i个长read
 	}
 }
 
-void replace()//添加3%的碱基替换错误
+void replace()
 {
-	int i=0,j=0;//i表示sample数组的行，j表示sample数组的列，sample[i][j]表示进行替换的碱基
+	int i=0,j=0;                                                        //the ith read ,the jth positiong,sample[i][j]is the base to be replaced
 	int num_of_replacement=0;
 	while(num_of_replacement<total_num_of_bases*0.01)
 	{
 		//cout<<"num_of_replace: "<<num_of_replace<<endl;
 		i=rand()%num_read;
 		j=rand()%length[i];
-		char ch;//随机插入的碱基
+		char ch;                                                        //generate a random base to replace the original sample[i][j]
 		switch (rand()%4)
 		{
 		case 0:
@@ -192,7 +180,7 @@ void insert()
 	fout4.open("E:\\insert.txt",ios::trunc);
 	int num_of_insertion=0;
 
-	int insert_i=0,insert_j=0;//i表示sample数组的行，j表示sample数组的列，sample[i][j]表示进行插入的位置
+	int insert_i=0,insert_j=0;                                           //the ith read ,the jth positiong,sample[i][j]is the base to be inserted
 	
 	while(num_of_insertion<total_num_of_bases*0.03)
 	{
@@ -205,7 +193,7 @@ void insert()
 		}
 		else
 			continue;
-		char ch;//随机插入的碱基
+		char ch;                                                         //generate a random base to insert to the position original sample[i][j]
 		switch (rand()%4)
 		{
 		case 0:
@@ -223,11 +211,11 @@ void insert()
 		}
 		fout4<<"sample["<<insert_i<<"]["<<insert_j<<"] insert"<<ch<<endl;
 		int j=length[insert_i];
-		for(;j>insert_j;j--)//将选定位置后面的碱基向后移动
+		for(;j>insert_j;j--)                                             //move the subread after insert-position backward
 		{
 			sample[insert_i][j]=sample[insert_i][j-1];
 		}
-		sample[insert_i][j]=ch;//插入一个碱基
+		sample[insert_i][j]=ch;
 		num_of_insertion++;
 		length[insert_i]++;
 	}
@@ -238,7 +226,7 @@ void deletion()
 	ofstream fout5;
 	fout5.open("E:\\delete.txt",ios::trunc);
 
-	int deletion_i=0,deletion_j=0;//i表示sample数组的行，j表示sample数组的列，sample[i][j]表示进行删除的位置
+	int deletion_i=0,deletion_j=0;                                       //the ith read ,the jth positiong,sample[i][j]is the base to be inserted
 	int num_of_deletion=0;
 	//cout<<"total_num_of_bases: "<<total_num_of_bases<<endl;
 	while(num_of_deletion<total_num_of_bases*0.03)
@@ -261,11 +249,11 @@ void deletion()
 			continue;
 		fout5<<"sample["<<deletion_i<<"]["<<deletion_j<<"] delete"<<sample[deletion_i][deletion_j]<<endl;
 		int j=deletion_j;
-		for(;j<length[deletion_i]-1;j++)//将选定位置后面的碱基向后移动
+		for(;j<length[deletion_i]-1;j++)                                 //move the subread after delete-position forward
 		{
 			sample[deletion_i][j]=sample[deletion_i][j+1];
 		}
-		sample[deletion_i][j]='0';//插入一个碱基
+		sample[deletion_i][j]='0';
 		num_of_deletion++;
 		length[deletion_i]--;
 	}
@@ -284,6 +272,7 @@ void output_sample()
 	}
 }
 
+/*
 void get_short_k_mer()
 {
 	num_short_k_mer=0;
@@ -326,6 +315,7 @@ void get_short_k_mer()
 	
 }
 
+
 void output_short_k_mer()
 {
 	cout<<num_short_k_mer<<endl;
@@ -334,7 +324,7 @@ void output_short_k_mer()
 		cout<<array_k_mer[i].ch<<" "<<array_k_mer[i].count_ch<<endl;
 	}
 }
-
+*/
 void save_as_query()
 {
 	ofstream fout1;
@@ -414,31 +404,28 @@ void read_file()
 
 extern void dataset()
 {
-
-	//static char genome[len_genome+1];//基因组字符串
 	srand((int)time(0));
-	memset(position,0,sizeof(int)*num_read);//position 初始化为0
+	memset(position,0,sizeof(int)*num_read);
 	initiate_sample();
-	initiate_array_k_mer();
-
-	rand_genome(genome,len_genome);//生成随机基因组
+	
+	rand_genome(genome,len_genome);
 	cout<<"rand_genome(genome,len_genome);"<<endl;
-	//output_genome();
-	rand_position(position, num_read);//产生1000个随机起点
-	cout<<"rand_position(position, num_read);//产生1000个随机起点"<<endl;
+
+	rand_position(position, num_read);
+	cout<<"rand_position(position, num_read);"<<endl;
 	//output_position();
-	rand_length();//生成随机长度
-	cout<<"rand_length(length,num_read);//生成随机长度"<<endl;
+	rand_length();
+	cout<<"rand_length(length,num_read);"<<endl;
 	//output_read_length();	
 	rand_read();
 	cout<<"rand_read();"<<endl;
 	
-	insert();//引入插入错误
-	cout<<"insert();//引入插入错误"<<endl;
+	insert();
+	cout<<"insert();"<<endl;
 
 	
-	deletion();//引入删除错误
-	cout<<"deletion();//引入删除错误"<<endl;
+	deletion();
+	cout<<"deletion();"<<endl;
 
 	
 	save_as_query();
