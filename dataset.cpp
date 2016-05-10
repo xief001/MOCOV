@@ -261,7 +261,7 @@ void deletion()
 
 void output_sample()
 {
-	for(int i=0;i<num_read;i++)//输出添加碱基替换错误后的所有长read
+	for(int i=0;i<num_read;i++)
 	{
 		cout<<"第"<<i<<"条长read：";
 		for(int j=0;j<length[i];j++)
