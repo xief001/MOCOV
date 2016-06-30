@@ -9,8 +9,10 @@ char sample[num_read][int(len_read*2)];                    //array for store eve
 int total_num_of_bases=0 ;                                 //total num of bases in sample
 //k_mer array_k_mer[len_array_k_mer];
 int num_short_k_mer=0;                                     //number of k-mers for short match
+char original[num_read][int(len_read*2)];  
+int original_len[num_read]={0};
 
-
+int read_count=0;
 void initiate_sample()
 {
 	for(int i=0;i<num_read;i++)                           
@@ -102,19 +104,9 @@ void rand_length()
 	for(i=0;i<num_read;i++)
 	{
 		//length[i]=10000;
-		length[i]=rand()%((int )(0.9*len_read))+((int )(0.1*len_read));
+		original_len[i]=rand()%((int )(0.9*len_read))+((int )(0.1*len_read));
 		//str[i]=rand()%(len_read-1000)+1000;//str[i]=rand()%9000+1000;此处为1~10
 	}
-}
-void output_read_length()
-{
-	cout<<"每条read长度："<<endl;
-	int i;
-	for(i=0;i<num_read;i++)
-	{
-		cout<<length[i]<<' ';
-	}
-	cout<<endl;
 }
 
 void rand_read()
@@ -123,16 +115,49 @@ void rand_read()
 	total_num_of_bases=0;
 	for(i=0;i<num_read;i++)
 	{
-		if((position[i]+length[i])>len_genome)
+		if((position[i]+original_len[i])>len_genome)
 		{
-			length[i]=len_genome-position[i];
+			original_len[i]=len_genome-position[i];
 		}
-		for(j=0;j<length[i];j++)
+		for(j=0;j<original_len[i];j++)
 		{
-			sample[i][j]=genome[position[i]+j];
+			original[i][j]=genome[position[i]+j];
 		}
-		total_num_of_bases+=length[i];
+		total_num_of_bases+=original_len[i];
 		//rand_read(sample[i],genome,position[i],length[i]);
+	}
+}
+
+void save_as_original()
+{
+	ofstream fout1;
+	fout1.open("E:\\original_reads_for_MOCOV.fasta",ios::trunc);
+	for(int i=0;i<num_read;i++)
+	{
+		fout1<<">No."<<i<<" position="<<position[i]<<" length="<<original_len[i]<<endl;
+		for(int j=0;j<original_len[i];j++)
+		{
+			fout1<<original[i][j];
+		}
+		fout1<<endl;
+	}
+}
+
+void copy_length()
+{
+	for(int i=0;i<num_read;i++)
+	{
+		length[i]=original_len[i];
+	}
+}
+void copy_read()
+{
+	for(int i=0;i<num_read;i++)
+	{
+		for(int j=0;j<length[i];j++)
+		{
+			sample[i][j]=original[i][j];
+		}
 	}
 }
 
@@ -219,6 +244,7 @@ void insert()
 		num_of_insertion++;
 		length[insert_i]++;
 	}
+	fout4<<"num of insertion = "<<num_of_insertion<<endl;
 }
 
 void deletion()
@@ -233,14 +259,6 @@ void deletion()
 	{
 		//cout<<"num_of_deletion: "<<num_of_deletion<<endl;
 		deletion_i=rand()%num_read;
-		/*
-		if(length[deletion_i]!=0)
-		{
-			deletion_j=rand()%length[deletion_i];
-		}
-		else 
-			continue;
-		*/
 		if(length[deletion_i]>(2*short_k))
 		{
 			deletion_j=rand()%(length[deletion_i]-short_k*2)+short_k;
@@ -257,32 +275,23 @@ void deletion()
 		num_of_deletion++;
 		length[deletion_i]--;
 	}
+	fout5<<"num of deletion = "<<num_of_deletion<<endl;
 }
 
-void output_sample()
-{
-	for(int i=0;i<num_read;i++)
-	{
-		cout<<"第"<<i<<"条长read：";
-		for(int j=0;j<length[i];j++)
-		{
-			cout<<j<<sample[i][j]<<" ";
-		}
-		cout<<endl;
-	}
-}
 
 
 void save_as_query()
 {
 	ofstream fout1;
-	fout1.open("E:\\original.fasta",ios::trunc);
+	fout1.open("E:\\query_read_for_MOCOV.fasta",ios::trunc);
 	for(int i=0;i<num_read;i++)
 	{
-		fout1<<">"<<i<<position[i]<<endl;
+		//fout1<<">No."<<i<<" position="<<position[i]<<" length="<<length[i]<<endl;
+		fout1<<">No."<<i<<"/0_"<<length[i]<<endl;
+
 		for(int j=0;j<length[i];j++)
 		{
-			fout1<<j<<sample[i][j]<<" ";
+			fout1<<sample[i][j];
 		}
 		fout1<<endl;
 	}
@@ -293,13 +302,12 @@ void save_as_target()
 	ofstream fout2;
 	fout2.open("E:\\target.fasta",ios::trunc);
 
-	fout2<<">target";
+	fout2<<">target\n";
 	for(int j=0;j<len_genome;j++)
 	{
-		fout2<<j<<genome[j]<<" ";
+		fout2<<genome[j];
 	}
 	fout2<<endl;
-
 }
 
 void read_file()
@@ -308,7 +316,7 @@ void read_file()
 	char ch;
 	int i=0,j=0;
 	int flag=0;
-	f_fp=fopen("E:\\original.fasta","r");
+	f_fp=fopen("E:\\query_read_for_MOCOV.fasta","r");
 	while (!feof(f_fp))
 	{		
 		ch=fgetc(f_fp);
@@ -321,12 +329,12 @@ void read_file()
 			if(flag==0)
 			{
 				flag=1;
+				read_count++;
 				continue;
 			}
 			else
 			{
-				length[i]=j;
-				i++;
+				length[read_count-1]=j;
 				j=0;
 				flag=0;
 				continue;
@@ -342,9 +350,13 @@ void read_file()
 		}
 		if(ch=='A'||ch=='T'||ch=='C'||ch=='G')
 		{
-			sample[i][j]=ch;
+			sample[read_count-1][j]=ch;
 			j++;
 		}
+	}
+	if(ch==-1)
+	{
+		//length[read_count-1]=j;
 	}
 }
 
@@ -355,10 +367,10 @@ extern void dataset()
 	srand((int)time(0));
 	memset(position,0,sizeof(int)*num_read);
 	initiate_sample();
-	
+	/*
 	rand_genome(genome,len_genome);
 	cout<<"rand_genome(genome,len_genome);"<<endl;
-
+	
 	rand_position(position, num_read);
 	cout<<"rand_position(position, num_read);"<<endl;
 	//output_position();
@@ -367,7 +379,10 @@ extern void dataset()
 	//output_read_length();	
 	rand_read();
 	cout<<"rand_read();"<<endl;
-	
+	save_as_original();
+	copy_length();
+	copy_read();
+	//replace();
 	insert();
 	cout<<"insert();"<<endl;
 
@@ -379,8 +394,8 @@ extern void dataset()
 	save_as_query();
 	save_as_target();
 	//save_as_kmer_times();
-	
-	//read_file();
+	*/
+	read_file();
 
 	
 }

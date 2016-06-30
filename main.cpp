@@ -15,6 +15,7 @@ using namespace std;
 
 
 int main()
+
 { 
 	while (1)
 	{
@@ -22,7 +23,7 @@ int main()
 		hash_table();
 		//find_error();
 		correct_errors();
-
+		cout<<"getchar"<<endl;
 		getchar();
 	}
 	

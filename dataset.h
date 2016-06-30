@@ -12,18 +12,19 @@ using namespace std;
 
 
 /*
-#define len_genome 1000000       //genome size 10000000
-#define num_read 5000            //random read position 1000
+#define len_genome 10000      //genome size 10000000
+#define num_read 500           //random read position 1000
 #define len_read 1000            //read length 1K-10K
-#define short_k 7                //k-mer length for short aligning
+#define short_k 11				//k-mer length for short aligning
 #define long_k 20                // k-mer length for checking correction
 #define len_index 3              //index length for comparing k-mers in hash table with k-mers in read 
-#define len_index_error 3        //hamming distance between k-mers' index in hash table with k-mers in read
-#define len_k_mer_error 3        //hamming distance between k-mers in hash table with k-mers in read
+#define len_index_error 2        //hamming distance between k-mers' index in hash table with k-mers in read
+#define len_k_mer_error 0        //hamming distance between k-mers in hash table with k-mers in read
 #define invalid_value  3         //if match value < invalid_value ,the match is invalid
 #define valid_value  3           //if match value > valid_value ,the match is valid
+#define count_value 2
 */
-
+/*
 #define len_genome 4000000       //genome size 10000000
 #define num_read 1000            //random read position 1000
 #define len_read 10000           //read length 1000-10000
@@ -34,20 +35,22 @@ using namespace std;
 #define len_k_mer_error 1        //hamming distance between k-mers in hash table with k-mers in read
 #define invalid_value  2         //if match value < invalid_value ,the match is invalid
 #define valid_value  5           //if match value > valid_value ,the match is valid
-
-/*
-#define len_genome 1000          //genome size 1000
-#define num_read 50              //random read position 50
-#define len_read 100             //read length 10-100
-#define short_k 6                //k-mer length for short aligning
-#define long_k 6                 //k-mer length for checking correction
-#define len_index 3              //index length for comparing k-mers in hash table with k-mers in read 
-#define len_index_error 3        //hamming distance between k-mers' index in hash table with k-mers in read
-#define len_k_mer_error 0        //hamming distance between k-mers in hash table with k-mers in read
-#define invalid_value  2         //if match value < invalid_value ,the match is invalid
-#define valid_value  2           //if match value > valid_value ,the match is valid
-
 */
+#define len_genome 1000          //genome size 1000
+#define num_read 500              //random read position 50
+#define len_read 100             //read length 10-100
+#define short_k 10                //k-mer length for short aligning
+#define long_k 20                 //k-mer length for checking correction
+#define medium_k short_k+1
+//#define medium_k short_k+short_k/4
+#define len_index 3              //index length for comparing k-mers in hash table with k-mers in read 
+#define len_index_error 2        //hamming distance between k-mers' index in hash table with k-mers in read
+#define len_k_mer_error 0        //hamming distance between k-mers in hash table with k-mers in read
+#define invalid_value  3         //if match value < invalid_value ,the match is invalid
+#define valid_value  3           //if match value > valid_value ,the match is valid
+#define count_value 2      
+//#define medium_len short_k/2
+
 typedef struct k_mer
 {
 	//char* ch ;
