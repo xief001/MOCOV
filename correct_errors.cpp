@@ -544,9 +544,10 @@ void check_deletion(int i,int j,int count ,char* tmp)
 	flag=0;
 }
 
-char ch[short_k]={0};
-int j_tail=0;
 
+
+
+/*
 int get_next_short_k_mer(int i,int j_tail,char* complex)
 {
 	int n=0;
@@ -557,22 +558,33 @@ int get_next_short_k_mer(int i,int j_tail,char* complex)
 	ch[n]=sample[i][j_tail];
 	return j_tail;
 }
+*/
 
-int find_left_complex(int i,int j ,char * complex ,int count)
+int find_left_complex(int i,int j ,char * corrected_ch ,int count)
 {
+	char ch[short_k]={0};
 	int tmp=count_value;
 	int n=0;
-	for(n=0;n<short_k-1;n++)
+	for(n=0;n<short_k;n++)
 	{
-		ch[n]=complex[medium_k-short_k+1+n];
+		ch[n]=corrected_read[i][corrected_len[i]-short_k+1+n];
 	}
-	ch[n]=sample[i][j+medium_k+1];
+	ch[n]=sample[i][j];
 	tmp=search_valid_short_kmer(ch);
-	j_tail=j+medium_k+2;
-	while(tmp>=count_value)
+	
+	if(tmp>=count_value)
 	{
-		j_tail=get_next_short_k_mer(i,j_tail,ch);
-		tmp=search_valid_short_kmer(ch);
+		j=find_left_complex(i,j,ch,count-1);
+		count--;
+		if(count==-1)
+		{
+			return -1;
+		}
+	}
+	else
+	{
+		check_complex(i,j-short_k,count+short_k);
+		return j;
 	}
 	//base at position j is error. now distinguish insertion or deletion 
 }
@@ -630,7 +642,7 @@ int complex_error(int i,int j,char* ch)
 				{
 					corrected_read[i][corrected_len[i]]=ch1[n];
 					corrected_len[i]++;
-					flag=3;
+					flag=1;
 					return flag;
 				}
 			}
@@ -650,7 +662,7 @@ int complex_error(int i,int j,char* ch)
 				{
 					corrected_read[i][corrected_len[i]]=ch2[n];
 					corrected_len[i]++;
-					flag=3;
+					flag=2;
 					return flag;
 				}
 			}
@@ -678,9 +690,10 @@ int complex_error(int i,int j,char* ch)
 			}
 		}
 	}
+	return flag;
 }
 
-void check_complex(int i,int j,int count,char* tmp)
+void check_complex(int i,int j,int count)
 {
 	int flag=0;
 	char ch1[medium_k]={0},ch2[medium_k]={0};
@@ -697,34 +710,6 @@ void check_complex(int i,int j,int count,char* tmp)
 			ch1[m]=sample[i][j+m+1];
 		}
 	}
-	//==================ch2======================
-	int score_A=0,score_T=0,score_C=0,score_G=0,flag1=0;         //score of the deletion base
-	char ch2_1[medium_k]={0},ch2_2[medium_k]={0},ch2_3[medium_k]={0},ch2_4[medium_k]={0};
-	for( m = 0 ; m< medium_k-1;m++)
-	{
-		if(m<short_k-1)
-		{
-			//ch2[m]=sample[i][j+m];
-			ch2_1[m]=sample[i][j+m];
-			ch2_2[m]=sample[i][j+m];
-			ch2_3[m]=sample[i][j+m];
-			ch2_4[m]=sample[i][j+m];
-		}
-		else if(m==short_k-1)
-		{
-			ch2_1[m]='A';
-			ch2_2[m]='T';
-			ch2_3[m]='C';
-			ch2_4[m]='G';
-		}
-		else
-		{
-			ch2_1[m]=sample[i][j+m-1];
-			ch2_2[m]=sample[i][j+m-1];
-			ch2_3[m]=sample[i][j+m-1];
-			ch2_4[m]=sample[i][j+m-1];
-		}
-	}
 	
 	//==================get k-mer value1===================
 	int kmer_value1,kmer_value2;
@@ -739,85 +724,124 @@ void check_complex(int i,int j,int count,char* tmp)
 			corrected_len[i]++;
 		}
 		int left_count=0;
-		left_count=find_left_complex(i,j,ch1,count);
+		left_count=find_left_complex(i,j+medium_k+1,ch1,count-medium_k-1);
 	}
 
-	//==================get k-mer value2===================
-	score_A=search_valid_long_kmer(ch2_1);
-	score_T=search_valid_long_kmer(ch2_2);
-	score_C=search_valid_long_kmer(ch2_3);
-	score_G=search_valid_long_kmer(ch2_4);
-	
-	//==================get corrected deleted base===========
-	char deleted_base='0';
-	if(score_A>=score_C  &&  score_A>=score_G  &&  score_A>=score_T  && score_A>=valid_value)
+	if(flag==0)
 	{
-		deleted_base='A';
-		flag1=1;
-	}
-	else if(score_T>=score_A  &&  score_T>=score_G  &&  score_T>=score_C  && score_T>=valid_value)
-	{
-		deleted_base='T';
-		flag1=2;
-	}
-	else if(score_C>=score_A  &&  score_C>=score_G  &&  score_C>=score_T  && score_C>=valid_value)
-	{
-		deleted_base='C';
-		flag1=3;
-	}
-	else if(score_G>=score_C  &&  score_G>=score_A  &&  score_G>=score_T  && score_G>=valid_value)
-	{
-		deleted_base='G';
-		flag1=4;
-	}
-	if(flag1!=0)            //insertion error
-	{
-		flag=2;
-		int left_count=0;
-		if(flag1==1)
+		//==================ch2======================
+		int score_A=0,score_T=0,score_C=0,score_G=0,flag1=0;         //score of the deletion base
+		char ch2_1[medium_k]={0},ch2_2[medium_k]={0},ch2_3[medium_k]={0},ch2_4[medium_k]={0};
+		for( m = 0 ; m< medium_k-1;m++)
 		{
-			for(int n=0;n<medium_k;n++)
+			if(m<short_k-1)
 			{
-				corrected_read[i][corrected_len[i]]=ch2_1[n];
-				corrected_len[i]++;
+				//ch2[m]=sample[i][j+m];
+				ch2_1[m]=sample[i][j+m];
+				ch2_2[m]=sample[i][j+m];
+				ch2_3[m]=sample[i][j+m];
+				ch2_4[m]=sample[i][j+m];
 			}
-			left_count=find_left_complex(i,j,ch2_1,count);
+			else if(m==short_k-1)
+			{
+				ch2_1[m]='A';
+				ch2_2[m]='T';
+				ch2_3[m]='C';
+				ch2_4[m]='G';
+			}
+			else
+			{
+				ch2_1[m]=sample[i][j+m-1];
+				ch2_2[m]=sample[i][j+m-1];
+				ch2_3[m]=sample[i][j+m-1];
+				ch2_4[m]=sample[i][j+m-1];
+			}
 		}
 
-		else if(flag1==2)
-		{
-			for(int n=0;n<medium_k;n++)
-			{
-				corrected_read[i][corrected_len[i]]=ch2_2[n];
-				corrected_len[i]++;
-			}
-			left_count=find_left_complex(i,j,ch2_2,count);
-		}
+		//==================get k-mer value2===================
+		score_A=search_valid_long_kmer(ch2_1);
+		score_T=search_valid_long_kmer(ch2_2);
+		score_C=search_valid_long_kmer(ch2_3);
+		score_G=search_valid_long_kmer(ch2_4);
 
-		else if(flag1==3)
+		//==================get corrected deleted base===========
+		char deleted_base='0';
+		if(score_A>=score_C  &&  score_A>=score_G  &&  score_A>=score_T  && score_A>=valid_value)
 		{
-			for(int n=0;n<medium_k;n++)
-			{
-				corrected_read[i][corrected_len[i]]=ch2_3[n];
-				corrected_len[i]++;
-			}
-			left_count=find_left_complex(i,j,ch2_3,count);
+			deleted_base='A';
+			flag1=1;
 		}
-
-		else if(flag1==4)
+		else if(score_T>=score_A  &&  score_T>=score_G  &&  score_T>=score_C  && score_T>=valid_value)
 		{
-			for(int n=0;n<medium_k;n++)
+			deleted_base='T';
+			flag1=2;
+		}
+		else if(score_C>=score_A  &&  score_C>=score_G  &&  score_C>=score_T  && score_C>=valid_value)
+		{
+			deleted_base='C';
+			flag1=3;
+		}
+		else if(score_G>=score_C  &&  score_G>=score_A  &&  score_G>=score_T  && score_G>=valid_value)
+		{
+			deleted_base='G';
+			flag1=4;
+		}
+		if(flag1!=0)            //insertion error
+		{
+			flag=2;
+			int left_count=0;
+			if(flag1==1)
 			{
-				corrected_read[i][corrected_len[i]]=ch2_4[n];
-				corrected_len[i]++;
+				for(int n=0;n<medium_k;n++)
+				{
+					corrected_read[i][corrected_len[i]]=ch2_1[n];
+					corrected_len[i]++;
+				}
+				left_count=find_left_complex(i,j+medium_k-1,ch2_1,count-medium_k+1);
 			}
-			left_count=find_left_complex(i,j,ch2_4,count);
+
+			else if(flag1==2)
+			{
+				for(int n=0;n<medium_k;n++)
+				{
+					corrected_read[i][corrected_len[i]]=ch2_2[n];
+					corrected_len[i]++;
+				}
+				left_count=find_left_complex(i,j+medium_k-1,ch2_2,count-medium_k+1);
+			}
+
+			else if(flag1==3)
+			{
+				for(int n=0;n<medium_k;n++)
+				{
+					corrected_read[i][corrected_len[i]]=ch2_3[n];
+					corrected_len[i]++;
+				}
+				left_count=find_left_complex(i,j+medium_k-1,ch2_3,count-medium_k+1);
+			}
+
+			else if(flag1==4)
+			{
+				for(int n=0;n<medium_k;n++)
+				{
+					corrected_read[i][corrected_len[i]]=ch2_4[n];
+					corrected_len[i]++;
+				}
+				left_count=find_left_complex(i,j+medium_k-1,ch2_4,count-medium_k+1);
+			}
 		}
 	}
 	//complex error
 	if(flag==0)                                                        
 	{
+		int left_count;
 		flag=complex_error(i,j,ch1);
+		char ch[medium_k]={0};
+		for(int m=0;m<medium_k;m++)
+		{
+			ch[m]=corrected_read[i][corrected_len[i]-medium_k+m];
+		}
+		left_count=find_left_complex(i,j+medium_k+1,ch,count-short_k-1);
 	}
 	if(flag==0)
 	{
