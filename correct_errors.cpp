@@ -207,79 +207,7 @@ int distin_ins_del(int i ,int j )
 }
 
 
-/*
-void get_error_position()
-{
-	int count=0;
-	for(int i=0;i<num_read;i++)
-	{
-		for(int j=0;j<length[i]-short_k;j++)
-		{
-			if(short_k_mer_times[i][j].times<=valid_value)                       //use num of 1 to find error
-			{
-				count++;
-				continue;
-			}
-			else
-			{
-				if(count==0)
-				{
-					continue;
-				}
-				if(count==short_k)                                     //num of 1 = short_k, insertion
-				{
-					num_of_found_insertion++;
-					insertion[i][j-1]=1;
-					count=0;
-					continue;
-				}
-				if(count==short_k-2)
-				{
-					if(sample[i][j]!=sample[i][j+1])                   //deletion error
-					{
-						num_of_found_deletion++;
-						deletion[i][j+1]=1;                            //add a random base to position j,and move bases backward 
-						count=0;
-						continue;
-					}
-					else                                               //need further judgement
-					{
-						num_of_found_insertion++;
-						insertion[i][j]=1;
-						count=0;
-						continue;
-					}
-				}
-				if(count==short_k-1)                                   //num of 1 = short_k-1, insertion/deletion
-				{	
-					if(sample[i][j-1]!=sample[i][j])                   //deletion error
-					{
-						num_of_found_deletion++;
-						deletion[i][j]=1;                              //add a random base to position j,and move bases backward 
-						count=0;
-						continue;
-					}
-					else                                               //need further judgement
-					{
-						int flag=0;
-						flag=distin_ins_del( i , j);
-						if(flag==1)
-						{
-							insertion[i][j]=1;
-						}
-						if(flag==2)
-						{
-							deletion[i][j]=1;                          //add a random base to position j,and move backward bases
-						}
-					}
-				}
-				count=0;
-			}
-		}
-	}
-}
 
-*/
 
 
 void save_as_insertion()
@@ -559,7 +487,7 @@ int get_next_short_k_mer(int i,int j_tail,char* complex)
 	return j_tail;
 }
 */
-
+void check_complex(int i,int j,int count);
 int find_left_complex(int i,int j ,char * corrected_ch ,int count)
 {
 	char ch[short_k]={0};
@@ -887,7 +815,7 @@ void subf_position(int i)
 						//deleted_read_num++;
 						//deleted_read[deleted_read_num][deleted_len[deleted_read_num]]=sample[i][j];
 						//deleted_len[deleted_read_num]++;
-						check_complex(i,j-count,count,tmp1);
+						check_complex(i,j-count,count);
 						memset(tmp1,0,sizeof(char)*short_k*20);
 						count=0;
 						continue;
@@ -1132,7 +1060,7 @@ extern void correct_errors()
 	init_insertion();
 	init_deletion();
 	//init_complex();
-	get_error_position();
+	
 	//delete_invalid_region();
 	//save_as_deleted_reads();
 	correct();

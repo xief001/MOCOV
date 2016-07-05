@@ -1,7 +1,7 @@
 #include"main.h"
 #include"hash_table.h"
 #include"dataset.h"
-#include"find_errors.h"
+
 #include"correct_errors.h"
 #include<iostream>
 #include<stdio.h>
