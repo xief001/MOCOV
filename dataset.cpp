@@ -1,6 +1,5 @@
 #include"main.h"
-//#include"hash_table.h"
-#include"dataset.h"
+
 
 char genome[len_genome+1];                                 //genome
 int position[num_read];                                    //array for long read starting positions

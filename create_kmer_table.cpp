@@ -1,9 +1,5 @@
-#include"create_kmer_table.h"
-#include"dataset.h"
-#include<stdio.h>
-#include<math.h>
-#include<string.h>
-#include<malloc.h>
+#include"main.h"
+
 
 int index_num;
 extern int length[num_read];

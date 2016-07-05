@@ -1,6 +1,5 @@
-#include"dataset.h"
-#include"create_kmer_table.h"
-#include"correct_errors.h"
+#include"main.h"
+
 extern struct times_and_flag;
 
 extern times_and_flag short_k_mer_times[num_read][int(len_read*2)];
@@ -523,32 +522,32 @@ int complex_error(int i,int j,char* ch)
 	char ch_base[short_k-1]={0};
 	string ch_add[3][64]={0};
 
-	ch_add[0][0].c_str="A";ch_add[0][1].c_str="T";ch_add[0][2].c_str="C";ch_add[0][3].c_str="G";
+	ch_add[0][0]="A";ch_add[0][1]="T";ch_add[0][2]="C";ch_add[0][3]="G";
 
-	ch_add[1][0].c_str="AA";ch_add[1][1].c_str="AT";ch_add[1][2].c_str="AC";ch_add[1][3].c_str="AG";
-	ch_add[1][4].c_str="TA";ch_add[1][5].c_str="TT";ch_add[1][6].c_str="TC";ch_add[1][7].c_str="TG";
-	ch_add[1][8].c_str="CA";ch_add[1][9].c_str="CT";ch_add[1][10].c_str="CC";ch_add[1][11].c_str="CG";
-	ch_add[1][12].c_str="GA";ch_add[1][13].c_str="GT";ch_add[1][14].c_str="GC";ch_add[1][15].c_str="GG";
+	ch_add[1][0]="AA";ch_add[1][1]="AT";ch_add[1][2]="AC";ch_add[1][3]="AG";
+	ch_add[1][4]="TA";ch_add[1][5]="TT";ch_add[1][6]="TC";ch_add[1][7]="TG";
+	ch_add[1][8]="CA";ch_add[1][9]="CT";ch_add[1][10]="CC";ch_add[1][11]="CG";
+	ch_add[1][12]="GA";ch_add[1][13]="GT";ch_add[1][14]="GC";ch_add[1][15]="GG";
 
-	ch_add[2][0].c_str="AAA";ch_add[2][1].c_str="AAT";ch_add[2][2].c_str="AAC";ch_add[2][3].c_str="AAG";
-	ch_add[2][4].c_str="ATA";ch_add[2][5].c_str="ATT";ch_add[2][6].c_str="ATC";ch_add[2][7].c_str="ATG";
-	ch_add[2][8].c_str="ACA";ch_add[2][9].c_str="ACT";ch_add[2][10].c_str="ACC";ch_add[2][11].c_str="ACG";
-	ch_add[2][12].c_str="AGA";ch_add[2][13].c_str="AGT";ch_add[2][14].c_str="AGC";ch_add[2][15].c_str="AGG";
+	ch_add[2][0]="AAA";ch_add[2][1]="AAT";ch_add[2][2]="AAC";ch_add[2][3]="AAG";
+	ch_add[2][4]="ATA";ch_add[2][5]="ATT";ch_add[2][6]="ATC";ch_add[2][7]="ATG";
+	ch_add[2][8]="ACA";ch_add[2][9]="ACT";ch_add[2][10]="ACC";ch_add[2][11]="ACG";
+	ch_add[2][12]="AGA";ch_add[2][13]="AGT";ch_add[2][14]="AGC";ch_add[2][15]="AGG";
 
-	ch_add[2][16].c_str="TAA";ch_add[2][17].c_str="TAT";ch_add[2][18].c_str="TAC";ch_add[2][19].c_str="TAG";
-	ch_add[2][20].c_str="TTA";ch_add[2][21].c_str="TTT";ch_add[2][22].c_str="TTC";ch_add[2][23].c_str="TTG";
-	ch_add[2][24].c_str="TCA";ch_add[2][25].c_str="TCT";ch_add[2][26].c_str="TCC";ch_add[2][27].c_str="TCG";
-	ch_add[2][28].c_str="TGA";ch_add[2][29].c_str="TGT";ch_add[2][30].c_str="TGC";ch_add[2][31].c_str="TGG";
+	ch_add[2][16]="TAA";ch_add[2][17]="TAT";ch_add[2][18]="TAC";ch_add[2][19]="TAG";
+	ch_add[2][20]="TTA";ch_add[2][21]="TTT";ch_add[2][22]="TTC";ch_add[2][23]="TTG";
+	ch_add[2][24]="TCA";ch_add[2][25]="TCT";ch_add[2][26]="TCC";ch_add[2][27]="TCG";
+	ch_add[2][28]="TGA";ch_add[2][29]="TGT";ch_add[2][30]="TGC";ch_add[2][31]="TGG";
 
-	ch_add[2][32].c_str="CAA";ch_add[2][33].c_str="CAT";ch_add[2][34].c_str="CAC";ch_add[2][35].c_str="CAG";
-	ch_add[2][36].c_str="CTA";ch_add[2][37].c_str="CTT";ch_add[2][38].c_str="CTC";ch_add[2][39].c_str="CTG";
-	ch_add[2][40].c_str="CCA";ch_add[2][41].c_str="CCT";ch_add[2][42].c_str="CCC";ch_add[2][43].c_str="CCG";
-	ch_add[2][44].c_str="CGA";ch_add[2][45].c_str="CGT";ch_add[2][46].c_str="CGC";ch_add[2][47].c_str="CGG";
+	ch_add[2][32]="CAA";ch_add[2][33]="CAT";ch_add[2][34]="CAC";ch_add[2][35]="CAG";
+	ch_add[2][36]="CTA";ch_add[2][37]="CTT";ch_add[2][38]="CTC";ch_add[2][39]="CTG";
+	ch_add[2][40]="CCA";ch_add[2][41]="CCT";ch_add[2][42]="CCC";ch_add[2][43]="CCG";
+	ch_add[2][44]="CGA";ch_add[2][45]="CGT";ch_add[2][46]="CGC";ch_add[2][47]="CGG";
 
-	ch_add[2][48].c_str="GAA";ch_add[2][49].c_str="GAT";ch_add[2][50].c_str="GAC";ch_add[2][51].c_str="GAG";
-	ch_add[2][52].c_str="GTA";ch_add[2][53].c_str="GTT";ch_add[2][54].c_str="GTC";ch_add[2][55].c_str="GTG";
-	ch_add[2][56].c_str="GCA";ch_add[2][57].c_str="GCT";ch_add[2][58].c_str="GCC";ch_add[2][59].c_str="GCG";
-	ch_add[2][60].c_str="GGA";ch_add[2][61].c_str="GGT";ch_add[2][62].c_str="GGC";ch_add[2][63].c_str="GGG";
+	ch_add[2][48]="GAA";ch_add[2][49]="GAT";ch_add[2][50]="GAC";ch_add[2][51]="GAG";
+	ch_add[2][52]="GTA";ch_add[2][53]="GTT";ch_add[2][54]="GTC";ch_add[2][55]="GTG";
+	ch_add[2][56]="GCA";ch_add[2][57]="GCT";ch_add[2][58]="GCC";ch_add[2][59]="GCG";
+	ch_add[2][60]="GGA";ch_add[2][61]="GGT";ch_add[2][62]="GGC";ch_add[2][63]="GGG";
 	
 	int kmer_value[3][64]={0};
 
@@ -564,7 +563,7 @@ int complex_error(int i,int j,char* ch)
 			}
 			for(int n=0;n<4;n++)
 			{
-				ch1[short_k-1]=ch_add[m][n].c_str[0];
+				ch1[short_k-1]=ch_add[m][n][0];
 				kmer_value[m][n]=search_valid_short_kmer(ch1);
 				if(kmer_value[m][n]>=count_value)
 				{
@@ -583,8 +582,8 @@ int complex_error(int i,int j,char* ch)
 			}
 			for(int n=0;n<16;n++)
 			{
-				ch2[short_k-1]=ch_add[m][n].c_str[0];
-				ch2[short_k]=ch_add[m][n].c_str[1];
+				ch2[short_k-1]=ch_add[m][n][0];
+				ch2[short_k]=ch_add[m][n][1];
 				kmer_value[m][n]=search_valid_short_kmer(ch2);//
 				if(kmer_value[m][n]>=count_value)
 				{
@@ -603,9 +602,9 @@ int complex_error(int i,int j,char* ch)
 			}
 			for(int n=0;n<64;n++)
 			{
-				ch3[short_k-1]=ch_add[m][n].c_str[0];
-				ch3[short_k]=ch_add[m][n].c_str[1];
-				ch3[short_k+1]=ch_add[m][n].c_str[2];
+				ch3[short_k-1]=ch_add[m][n][0];
+				ch3[short_k]=ch_add[m][n][1];
+				ch3[short_k+1]=ch_add[m][n][2];
 
 				kmer_value[m][n]=search_valid_medium_kmer(ch3);//
 				if(kmer_value[m][n]>=count_value)

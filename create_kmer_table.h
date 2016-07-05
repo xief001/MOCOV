@@ -1,14 +1,7 @@
 #ifndef _HASH_TABLE_
 #define _HASH_TABLE_
 
-#include<iostream>
-#include<stdio.h>
-#include<time.h>
-#include<fstream>
-#include<string>
-#include<math.h>
-//#include"main.h"
-#include"dataset.h"
+
 using namespace std;
 
 

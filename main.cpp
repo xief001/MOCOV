@@ -1,13 +1,5 @@
 #include"main.h"
-#include"create_kmer_table.h"
-#include"dataset.h"
 
-#include"correct_errors.h"
-#include<iostream>
-#include<stdio.h>
-#include<time.h>
-#include<fstream>
-#include<string>
 
 using namespace std;
 

@@ -2,12 +2,9 @@
 #define _DATASET_H_
 
 
-#include<iostream>
-#include<stdio.h>
-#include<time.h>
-#include<fstream>
-#include<string>
-//#include"main.h"
+
+#include"main.h"
+
 using namespace std;
 
 
@@ -51,13 +48,13 @@ using namespace std;
 #define count_value 2      
 //#define medium_len short_k/2
 
+/*
 typedef struct k_mer
 {
-	//char* ch ;
 	string ch;                   
 	int count_ch;                //the k-mer appearing times
 }k_mer;
-
+*/
 extern char genome[len_genome+1];                  //genome
 extern int position[num_read];                     //array for long read starting positions
 extern int length[num_read];                       //array for every long read's length
