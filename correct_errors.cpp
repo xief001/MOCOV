@@ -1,5 +1,5 @@
 #include"dataset.h"
-#include"hash_table.h"
+#include"create_kmer_table.h"
 #include"correct_errors.h"
 extern struct times_and_flag;
 

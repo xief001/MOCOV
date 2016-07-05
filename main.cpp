@@ -1,5 +1,5 @@
 #include"main.h"
-#include"hash_table.h"
+#include"create_kmer_table.h"
 #include"dataset.h"
 
 #include"correct_errors.h"
@@ -21,7 +21,6 @@ int main()
 	{
 		dataset();
 		hash_table();
-		//find_error();
 		correct_errors();
 		cout<<"getchar"<<endl;
 		getchar();
