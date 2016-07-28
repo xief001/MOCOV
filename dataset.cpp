@@ -11,7 +11,7 @@ int num_short_k_mer=0;                                     //number of k-mers fo
 char original[num_read][int(len_read*2)];  
 int original_len[num_read]={0};
 
-int read_count=0;
+//int read_count=0;
 void initiate_sample()
 {
 	for(int i=0;i<num_read;i++)                           
@@ -277,8 +277,6 @@ void deletion()
 	fout5<<"num of deletion = "<<num_of_deletion<<endl;
 }
 
-
-
 void save_as_query()
 {
 	ofstream fout1;
@@ -308,14 +306,16 @@ void save_as_target()
 	}
 	fout2<<endl;
 }
-
+/*
 void read_file()
 {
 	FILE * f_fp;
 	char ch;
 	int i=0,j=0;
 	int flag=0;
-	f_fp=fopen("E:\\query_read_for_MOCOV.fasta","r");
+	const char* filename;
+	filename=query_file_name.c_str();
+	f_fp=fopen(filename,"r");
 	while (!feof(f_fp))
 	{		
 		ch=fgetc(f_fp);
@@ -359,17 +359,19 @@ void read_file()
 	}
 }
 
-
+*/
 
 extern void dataset()
 {
 	srand((int)time(0));
 	memset(position,0,sizeof(int)*num_read);
 	initiate_sample();
+
+
+
 	/*
 	rand_genome(genome,len_genome);
 	cout<<"rand_genome(genome,len_genome);"<<endl;
-	
 	rand_position(position, num_read);
 	cout<<"rand_position(position, num_read);"<<endl;
 	//output_position();
@@ -384,17 +386,16 @@ extern void dataset()
 	//replace();
 	insert();
 	cout<<"insert();"<<endl;
-
-	
 	deletion();
 	cout<<"deletion();"<<endl;
-
-	
 	save_as_query();
 	save_as_target();
 	//save_as_kmer_times();
 	*/
-	read_file();
+
+
+
+	//read_file();
 
 	
 }

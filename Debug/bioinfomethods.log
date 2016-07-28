@@ -1,0 +1,33 @@
+﻿生成启动时间为 2016/7/18 20:13:22。
+     1>项目“E:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\bioinfomethods.vcxproj”在节点 2 上(Build 个目标)。
+     1>ClCompile:
+         F:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt correct_errors.cpp create_kmer_table.cpp main.cpp
+         main.cpp
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\main.cpp(81): warning C4101: “j”: 未引用的局部变量
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\main.cpp(179): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 f:\program files (x86)\microsoft visual studio 11.0\vc\include\stdio.h(218) : 参见“fopen”的声明
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\main.cpp(174): warning C4101: “ch”: 未引用的局部变量
+         正在生成代码...
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\main.cpp(57): warning C4715: “parseargs”: 不是所有的控件路径都返回值
+         正在编译...
+         create_kmer_table.cpp
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\create_kmer_table.cpp(37): warning C4101: “j”: 未引用的局部变量
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\create_kmer_table.cpp(69): warning C4101: “j”: 未引用的局部变量
+         correct_errors.cpp
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\correct_errors.cpp(443): warning C4101: “m”: 未引用的局部变量
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\correct_errors.cpp(807): warning C4101: “m”: 未引用的局部变量
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\correct_errors.cpp(900): warning C4101: “kmer_value2”: 未引用的局部变量
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\correct_errors.cpp(1065): warning C4101: “m”: 未引用的局部变量
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\correct_errors.cpp(1159): warning C4101: “kmer_value2”: 未引用的局部变量
+         正在生成代码...
+     1>e:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\correct_errors.cpp(681): warning C4715: “find_left_complex”: 不是所有的控件路径都返回值
+       Link:
+         F:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"E:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\Debug\bioinfomethods.exe" /INCREMENTAL /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"E:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\Debug\bioinfomethods.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"E:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\Debug\bioinfomethods.lib" /MACHINE:X86 Debug\correct_errors.obj
+         Debug\create_kmer_table.obj
+         Debug\main.obj
+         bioinfomethods.vcxproj -> E:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\Debug\bioinfomethods.exe
+     1>已完成生成项目“E:\菲菲\学习\大四上\研究生预备课程\生物信息算法和智能系统设计\bioinfomethods\bioinfomethods\bioinfomethods.vcxproj”(Build 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:06.63

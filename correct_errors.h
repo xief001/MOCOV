@@ -1,11 +1,12 @@
 #ifndef _CORRECT_ERROES_
 #define _CORRECT_ERRORS_
+#include"main.h"
+extern char **corrected_read ;
+extern int *corrected_len;
+extern int **insertion;
+extern int **deletion;
 
-typedef struct com
-{
-	int flag;
-	int len;
-}com;
+
 
 typedef struct rawbase
 {
@@ -14,10 +15,5 @@ typedef struct rawbase
 										//-2   --->   deletion
 										//-3   --->   complex
 }rawbase;
-
-
 extern void correct_errors();
-
-
-
 #endif
